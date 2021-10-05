@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "lubycon-event-gateway"
+version = "0.1.0"
+description = ""
+authors = ["danielzepp"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+fastapi = "^0.68.2"
+uvicorn = "^0.15.0"
+mangum = "^0.12.2"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
