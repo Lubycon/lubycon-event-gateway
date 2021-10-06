@@ -1,17 +1,20 @@
-import os
-
 from fastapi import FastAPI
 from mangum import Mangum
+from starlette.middleware.cors import CORSMiddleware
 
-stage = os.environ.get('STAGE', None)
-openapi_prefix = f"/{stage}" if stage else "/"
+from app.api.v1.api import api_router
+from app.core.config import settings
 
-app = FastAPI(title="LubyconEventGateway", openapi_prefix=openapi_prefix)  # Here is the magic
+app = FastAPI(title=settings.PROJECT_NAME)
 
+# Set all CORS enabled origins
+app.add_middleware(
+    CORSMiddleware,
+    allow_credentials=True,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-@app.get("/hello")
-def hello_world():
-    return {"message": "Hello World"}
-
-
+app.include_router(api_router, prefix=settings.API_V1_STR)
 handler = Mangum(app)
