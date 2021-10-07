@@ -11,7 +11,7 @@ router = APIRouter()
 async def collect_event(
     request: Request,
     v: str = Query('', min_length=1, description="The version of the log client library."),
-    tid: str = Query('', title="", min_length=36, max_length=40, description="A unique value for the event. Used to filter duplicate events."),
+    tid: str = Query('', title="", min_length=36, description="A unique value for the event. Used to filter duplicate events."),
     sid: str = Query('', min_length=36, description="User session uuid, should expire on the client after 10 minutes of no user action."),
     sdid: str = Query('', min_length=36, description="User session uuid. Unlike sid, it is a device-dependent value that does not have an expiration time."),
     cid: str = Query('', min_length=20, description="This is the client key issued by the Lubycon DevOps Guild. Each team has a unique value."),
