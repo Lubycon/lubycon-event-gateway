@@ -5,7 +5,7 @@ package:
 
 provider:
   name: aws
-  runtime: python3.9
+  runtime: python3.8
   region: ap-northeast-2
   stage: ${opt:stage, "alpha"}
   profile: lubycon-mgmt
@@ -21,7 +21,7 @@ custom:
   customDomain:
     domainName: ${self:custom.${self:provider.stage}.subDomainName}.lubycon.io
     stage: ${self:provider.stage}
-    certificateArn: arn:aws:acm:us-east-1:554707519121:certificate/652be07a-1826-43e6-a66e-1b6c36855be9
+    certificateArn: arn:aws:acm:us-east-1:554707519121:certificate/652be07a-1826-43e6-a66e-1b6c36855be9 # includes *.lubycon, *.alpha.lubycon
     autoDomain: true
   alpha:
     subDomainName: event-gateway.alpha
