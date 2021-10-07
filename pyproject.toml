@@ -10,6 +10,7 @@ fastapi = "^0.68.2"
 uvicorn = "^0.15.0"
 mangum = "^0.12.2"
 user-agents = "^2.2.0"
+boto3 = "^1.18.56"
 
 [tool.poetry.dev-dependencies]
 

@@ -1,8 +1,9 @@
+import json
 from typing import Any
 
 from fastapi import APIRouter, Query, Body, Request
-from app.utils import request_parse
-
+from app.utils import aws, request_parse
+from app.core.config import settings
 
 router = APIRouter()
 
@@ -44,6 +45,10 @@ async def collect_event(
         **body,
     }
     data = await request_parse.dict_values_convert_string(data)
+
+    aws_session = await aws.get_session()
+    sqs_client = aws_session.client('sqs')
+    sqs_client.send_message(QueueUrl=settings.AWS_EVENT_LOG_SQS_URL, MessageBody=json.dumps(data))
 
     return {
         "message": "success",
