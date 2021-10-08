@@ -14,10 +14,12 @@ provider:
 plugins:
   - serverless-python-requirements
   - serverless-domain-manager
+  - serverless-plugin-log-retention
 
 custom:
   pythonRequirements:
     dockerizePip: true
+  logRetentionInDays: 7
   customDomain:
     domainName: ${self:custom.${self:provider.stage}.subDomainName}.lubycon.io
     stage: ${self:provider.stage}
@@ -25,18 +27,41 @@ custom:
     autoDomain: true
   alpha:
     subDomainName: event-gateway.alpha
-    eventLogSqsUrl: https://TODO
+    eventLogSqsArn: arn:aws:sqs:ap-northeast-2:554707519121:test-queue
+    eventLogSqsUrl: https://sqs.ap-northeast-2.amazonaws.com/554707519121/test-queue # TODO Terraform
+    executionRoleArn: arn:aws:iam::554707519121:role/lambda-test # TODO Terraform
   production:
     subDomainName: event-gateway
-    eventLogSqsUrl: https://TODO
+    eventLogSqsUrl: https://TODO # TODO Terraform
+    executionRoleArn: TEST # TODO Terraform
+  vpc:
+    subnet_ids: [subnet-035f9023272c2244f, subnet-0e6637695b17ba32d, subnet-05391a691edad8eae]
+    security_group_ids:
+      - sg-019f346d017f05d02 # lubycon-mgmt-an2-sg-pri
+      - sg-0a57ac6c25d77831e # lubycon-mgmt-an2-sg-pri-lambda
+      #- sg-.. # lubycon-mgmt-an2-sg-pri-lambda-event-gateway
+  tags:
+    Product: Lubycon
+    Duty: LubyconDevOps
+    Stack: ${self:provider.stage}
+    Role: event-gateway
 
 functions:
   api:
     package:
       patterns:
         - app/*
-    handler: app.main.handler
-    #architectures: arm64 서울리전 나와라아...
+    handler: app.main.api_handler
+    memorySize: 128
+    timeout: 5
+    vpc:
+      subnetIds:
+        ${self:custom.vpc.subnet_ids}
+      securityGroupIds:
+        ${self:custom.vpc.security_group_ids}
+    role: ${self:custom.${self:provider.stage}.executionRoleArn}
+    tags: ${self:custom.tags}
+    #architectures: arm64 서울리전 존-버
     environment:
       STAGE: ${self:provider.stage}
       REGION: ${self:provider.region}
@@ -45,3 +70,26 @@ functions:
       - http:
           method: any
           path: /{proxy+}
+  worker:
+    package:
+      patterns:
+        - app/*
+    handler: app.main.worker_handler
+    memorySize: 128
+    timeout: 60
+    vpc:
+      subnetIds:
+        ${self:custom.vpc.subnet_ids}
+      securityGroupIds:
+        ${self:custom.vpc.security_group_ids}
+    role: ${self:custom.${self:provider.stage}.executionRoleArn}
+    tags: ${self:custom.tags}
+    #architectures: arm64 서울리전 존-버
+    environment:
+      STAGE: ${self:provider.stage}
+      REGION: ${self:provider.region}
+    events:
+      - sqs:
+          arn: ${self:custom.${self:provider.stage}.eventLogSqsArn}
+          batchSize: 10
+          maximumBatchingWindow: 60
