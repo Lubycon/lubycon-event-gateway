@@ -14,8 +14,7 @@ class Settings(BaseSettings):
 
     AWS_LOCAL_PROFILE: str = 'lubycon-mgmt'
     AWS_DEFAULT_REGION: str = os.getenv('REGION', 'ap-northeast-2')
-    # TODO : Terraform에서 생성한 test queue로 변경?
-    AWS_EVENT_LOG_SQS_URL: str = os.getenv('AWS_EVENT_LOG_SQS_URL', 'https://sqs.ap-northeast-2.amazonaws.com/554707519121/test-queue')
+    AWS_EVENT_LOG_SQS_URL: str = os.getenv('AWS_EVENT_LOG_SQS_URL', 'https://sqs.ap-northeast-2.amazonaws.com/554707519121/lubycon-alpha-an2-event-gateway-sqs')
     # SENTRY_DSN: Optional[HttpUrl] = None
 
     # @validator('SENTRY_DSN', pre=True)

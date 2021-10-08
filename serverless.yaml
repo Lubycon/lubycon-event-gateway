@@ -15,7 +15,6 @@ plugins:
   - serverless-python-requirements
   - serverless-domain-manager
   - serverless-plugin-log-retention
-
 custom:
   pythonRequirements:
     dockerizePip: true
@@ -27,19 +26,20 @@ custom:
     autoDomain: true
   alpha:
     subDomainName: event-gateway.alpha
-    eventLogSqsArn: arn:aws:sqs:ap-northeast-2:554707519121:test-queue
-    eventLogSqsUrl: https://sqs.ap-northeast-2.amazonaws.com/554707519121/test-queue # TODO Terraform
-    executionRoleArn: arn:aws:iam::554707519121:role/lambda-test # TODO Terraform
+    eventLogSqsArn: arn:aws:sqs:ap-northeast-2:554707519121:lubycon-alpha-an2-event-gateway-sqs
+    eventLogSqsUrl: https://sqs.ap-northeast-2.amazonaws.com/554707519121/lubycon-alpha-an2-event-gateway-sqs
+    executionRoleArn: arn:aws:iam::554707519121:role/lubycon-alpha-an2-event-gateway-role
   production:
     subDomainName: event-gateway
-    eventLogSqsUrl: https://TODO # TODO Terraform
-    executionRoleArn: TEST # TODO Terraform
+    eventLogSqsArn: arn:aws:sqs:ap-northeast-2:554707519121:lubycon-alpha-an2-event-gateway-sqs
+    eventLogSqsUrl: https://sqs.ap-northeast-2.amazonaws.com/554707519121/lubycon-mgmt-an2-event-gateway-sqs
+    executionRoleArn: arn:aws:iam::554707519121:role/lubycon-mgmt-an2-event-gateway-role
   vpc:
     subnet_ids: [subnet-035f9023272c2244f, subnet-0e6637695b17ba32d, subnet-05391a691edad8eae]
     security_group_ids:
       - sg-019f346d017f05d02 # lubycon-mgmt-an2-sg-pri
       - sg-0a57ac6c25d77831e # lubycon-mgmt-an2-sg-pri-lambda
-      #- sg-.. # lubycon-mgmt-an2-sg-pri-lambda-event-gateway
+      - sg-01b1b755d3c139429 # lubycon-mgmt-an2-sg-pri-lambda-event-gateway
   tags:
     Product: Lubycon
     Duty: LubyconDevOps

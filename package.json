@@ -5,5 +5,8 @@
     "dependencies": {
         "serverless-domain-manager": "^5.1.5",
         "serverless-python-requirements": "^5.0.1"
+    },
+    "devDependencies": {
+        "serverless-plugin-log-retention": "^2.0.0"
     }
 }
