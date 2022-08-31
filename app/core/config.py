@@ -15,7 +15,11 @@ class Settings(BaseSettings):
     AWS_LOCAL_PROFILE: str = 'lubycon-mgmt'
     AWS_DEFAULT_REGION: str = os.getenv('REGION', 'ap-northeast-2')
     AWS_EVENT_LOG_SQS_URL: str = os.getenv('AWS_EVENT_LOG_SQS_URL', 'https://sqs.ap-northeast-2.amazonaws.com/554707519121/lubycon-alpha-an2-event-gateway-sqs')
+
+    if not os.getenv('GOOGLE_APPLICATION_CREDENTIALS'):
+        os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = '/Users/dan/lubycon/lubycon-event-gateway/secrets/gcp_credential.json'
     # SENTRY_DSN: Optional[HttpUrl] = None
+
 
     # @validator('SENTRY_DSN', pre=True)
     # def sentry_dsn_can_be_blank(cls, v: str) -> Optional[str]:
